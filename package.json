@@ -1,0 +1,37 @@
+{
+  "name": "mnki-url",
+  "version": "0.0.1",
+  "description": "Full stack url shortener application using the best practices that I know",
+  "private": true,
+  "workspaces": [
+    "server",
+    "front"
+  ],
+  "scripts": {
+    "back:dev": "cd ./server && npm run dev",
+    "back:test": "cd ./server && npm run test",
+    "back:lint": "cd ./server && npm run lint",
+    "back:build": "cd ./server && npm run build",
+    "back:start": "cd ./server && npm run start",
+    "front:dev": "cd ./front && npm run dev",
+    "front:test": "cd ./front && npm run test",
+    "front:lint": "cd ./front && npm run lint",
+    "front:build": "cd ./front && npm run build",
+    "front:preview": "cd ./front && npm run preview",
+    "dev": "concurrently --kill-others \"npm run back:dev\" \"npm run front:dev\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "globals": "^15.3.0"
+  },
+  "devDependencies": {
+    "dotenv": "16.4.5",
+    "eslint-config-love": "48.0.0",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "eslint-plugin-react-refresh": "0.4.6",
+    "typescript": "5.4.5",
+    "vitest": "1.6.0"
+  },
+  "author": "Ramón Hernández (MonkiG)",
+  "license": "ISC"
+}
