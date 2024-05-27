@@ -3,14 +3,18 @@ import request from 'supertest'
 import { type Server } from 'node:http'
 import App from '../../src/app'
 import Environment from '../../src/core/enums/environments'
+import { ResponseShortUrlDTO } from '../../src/modules/url/models'
+import { pool } from '../../src/context/context.postgres'
 
-describe.skip('Short url test', () => {
+describe('Short url test', () => {
   let app: App
   let server: Server
-  beforeAll(() => {
-    app = new App({ port: 3000, environment: Environment.DEVELOPMENT })
+  const url = 'https://monki-portfolio.vercel.app'
+  beforeAll(async () => {
+    app = new App({ port: 3001, environment: Environment.DEVELOPMENT })
     app.start()
     server = app.getServer()
+    await pool.query('DELETE FROM urls WHERE original=$1', [url])
   })
 
   afterAll(() => {
@@ -22,43 +26,24 @@ describe.skip('Short url test', () => {
       const response = await request(app.expressApp)
         .post('/short')
         .send({
-
+          url
         })
 
-      expect(response.status).toBe('201')
+      expect(response.status).toBe(201)
     })
 
-    test('Should return the url shorted', async () => {
+    test('Should return the response dto structure', async () => {
       const response = await request(app.expressApp)
         .post('/short')
         .send({
-
+          url
         })
 
-      // obtener la url acortada
-      expect(response.body.short).toBe('')
-    })
-  })
+      const responseBody: ResponseShortUrlDTO = response.body
 
-  describe('/short/:id', () => {
-    test('Should return stauts 302', async () => {
-      const response = await request(app.expressApp)
-        .get('/short/1')
-        .send({
-
-        })
-
-      expect(response.status).toBe('201')
-    })
-
-    test('Should have the original url', async () => {
-      const response = await request(app.expressApp)
-        .get('/short/1')
-        .send({
-
-        })
-
-      expect(response.header.location).toBe('')
+      Object.keys(ResponseShortUrlDTO).forEach(key => {
+        expect(responseBody).toHaveProperty(key)
+      })
     })
   })
 })
