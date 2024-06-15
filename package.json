@@ -1,23 +1,23 @@
 {
   "name": "mnki-url",
   "version": "0.0.1",
-  "description": "Full stack url shortener application using the best practices that I know",
+  "description": "Full stack url shortener application using the best practices that I know e.e",
   "private": true,
   "workspaces": [
     "server",
     "front"
   ],
   "scripts": {
-    "back:dev": "cd ./server && npm run dev",
-    "back:test": "cd ./server && npm run test",
-    "back:lint": "cd ./server && npm run lint",
-    "back:build": "cd ./server && npm run build",
-    "back:start": "cd ./server && npm run start",
-    "front:dev": "cd ./front && npm run dev",
-    "front:test": "cd ./front && npm run test",
-    "front:lint": "cd ./front && npm run lint",
-    "front:build": "cd ./front && npm run build",
-    "front:preview": "cd ./front && npm run preview",
+    "dev:back": "cd ./server && npm run dev",
+    "test:back": "cd ./server && npm run test",
+    "lint:back": "cd ./server && npm run lint",
+    "build:back": "cd ./server && npm run build",
+    "start:back": "cd ./server && npm run start",
+    "dev:front": "cd ./front && npm run dev",
+    "test:front": "cd ./front && npm run test",
+    "lint:front": "cd ./front && npm run lint",
+    "build:front": "cd ./front && npm run build",
+    "preview:front": "cd ./front && npm run preview",
     "dev": "concurrently --kill-others \"npm run back:dev\" \"npm run front:dev\""
   },
   "dependencies": {

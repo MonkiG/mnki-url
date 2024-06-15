@@ -6,7 +6,7 @@ import cors from 'cors'
 import AuthRouter from './modules/auth/routes'
 import UserRouter from './modules/user/routes'
 import UrlRouter from './modules/url/routes'
-import UserLinksRouter from './modules/user-links/routes'
+import UserLinksRouter from './modules/user-urls/routes'
 import UsersRouter from './modules/users/routes'
 import MainRouter from './modules/index/route'
 
@@ -38,7 +38,7 @@ export default class App {
 
   #routes (): void {
     this.expressApp.use('/auth', new AuthRouter().router)
-    this.expressApp.use('/user/:id/links', new UserLinksRouter().router)
+    this.expressApp.use('/user/:id/urls', new UserLinksRouter().router)
     this.expressApp.use('/user', new UserRouter().router)
     this.expressApp.use('/users', new UsersRouter().router)
     this.expressApp.use('/short', new UrlRouter().router)

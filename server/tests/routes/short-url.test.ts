@@ -11,7 +11,7 @@ describe('Short url test', () => {
   let server: Server
   const url = 'https://monki-portfolio.vercel.app'
   beforeAll(async () => {
-    app = new App({ port: 3001, environment: Environment.DEVELOPMENT })
+    app = new App({ port: 3002, environment: Environment.DEVELOPMENT })
     app.start()
     server = app.getServer()
     await pool.query('DELETE FROM urls WHERE original=$1', [url])

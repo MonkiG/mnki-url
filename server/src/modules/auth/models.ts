@@ -1,3 +1,13 @@
+import { type UUID } from '../../core/types'
+
+export interface SignUpDbRespose {
+  id: UUID
+  userName: string
+  email: string
+  password: string
+  createdAt: Date
+  updatedAt: Date
+}
 export interface LoginDto {
   identifier: string // Puede ser email o username
   password: string

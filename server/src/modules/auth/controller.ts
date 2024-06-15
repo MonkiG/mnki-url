@@ -14,17 +14,23 @@ class AuthController {
     message: ''
   }
 
-  login (_req: Request, res: Response): void {
-    // const { body } = req
+  async login (req: Request, res: Response): Promise<void> {
+    const { body } = req
     try {
-      // const loginData = this.validator.toLoginDto(body)
-      // validar en la db
-
-      res.status(HttpResponsesStatuses.OK).json({ message: 'Correct login' })
+      const loginData = this.validator.toLoginDto(body)
+      const loginAuth = await this.services.logIn(loginData)
+      if (!loginAuth) res.status(HttpResponsesStatuses.NOT_FOUND).json({ message: ' User don\'t found!' })
+      else {
+        res.status(HttpResponsesStatuses.OK).json(loginAuth)
+      }
     } catch (e: any) {
       const { name } = e
       if (name === ErrorNames.TypeError) {
         res.status(HttpResponsesStatuses.BAD_REQUEST).json({ message: 'Invalid data format' })
+      }
+
+      if (name === 'password error') {
+        res.status(401).json({ message: 'Incorrect password' })
       }
     }
   }
@@ -34,10 +40,9 @@ class AuthController {
 
     try {
       const signUpData = this.validator.toSignUpDto(body)
-      // Enviar a la base de datos
 
       const responseDto = await this.services.signUp(signUpData)
-      console.log(responseDto)
+
       if (responseDto !== null) {
         res.status(HttpResponsesStatuses.CREATED).json(responseDto)
       } else {

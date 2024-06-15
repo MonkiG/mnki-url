@@ -7,8 +7,8 @@ const Config: Record<string, string> = {
   DB_HOST: process.env.DB_HOST!,
   DB_PORT: process.env.DB_PORT!,
   DB_NAME: process.env.DB_NAME!,
-  JWT_KEY: process.env.JWT_KEY!
-
+  JWT_KEY: process.env.JWT_KEY!,
+  TEST_EMAIL: process.env.TEST_EMAIL!
 }
 
 export default Config

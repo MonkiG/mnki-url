@@ -14,7 +14,7 @@ describe('Main routes tests ("/")', () => {
   let shortenedUrl
   beforeAll((async () => {
     app = new App({
-      port: 3000,
+      port: 3001,
       environment: Environment.LOCAL
     })
     app.start()

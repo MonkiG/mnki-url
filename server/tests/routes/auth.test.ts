@@ -4,12 +4,13 @@ import request from 'supertest'
 import Environment from '../../src/core/enums/environments'
 import { HttpResponsesStatuses } from '../../src/core/enums/Responses'
 import { pool } from '../../src/context/context.postgres'
+import Config from '../../src/core/config'
 
 describe('Auth routes', () => {
   let app: App
   beforeAll(async () => {
     app = new App({
-      port: 3000,
+      port: 3003,
       environment: Environment.LOCAL
     })
     app.start()
@@ -28,10 +29,23 @@ describe('Auth routes', () => {
         .send({
           userName: 'MonkiG',
           password: 'password',
-          email: 'raan.heam@gmail.com'
+          email: Config.TEST_EMAIL
         })
 
       expect(response.status).toBe(HttpResponsesStatuses.CREATED)
+    })
+
+    test('Should return status 409', async () => {
+      const response = await request(app.expressApp)
+        .post('/auth/signup')
+        .set('content-type', 'application/json')
+        .send({
+          userName: 'MonkiG',
+          password: 'password',
+          email: Config.TEST_EMAIL
+        })
+
+      expect(response.status).toBe(409)
     })
   })
 
@@ -47,5 +61,17 @@ describe('Auth routes', () => {
 
       expect(response.status).toBe(200)
     })
+  })
+
+  test('Should return status 401', async () => {
+    const response = await request(app.expressApp)
+      .post('/auth/login')
+      .set('content-type', 'application/json')
+      .send({
+        identifier: 'MonkiG',
+        password: 'Some bad password'
+      })
+
+    expect(response.status).toBe(401)
   })
 })

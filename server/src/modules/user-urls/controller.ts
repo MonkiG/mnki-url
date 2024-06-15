@@ -1,5 +1,5 @@
 import { type Response, type Request } from 'express'
-import type BaseResourceController from './../../core/lib/BaseResourceController'
+import type BaseResourceController from '../../core/lib/BaseResourceController'
 
 class UserLinksController implements BaseResourceController {
   getAll (_: Request, res: Response): void {

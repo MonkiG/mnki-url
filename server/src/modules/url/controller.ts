@@ -11,10 +11,6 @@ class ShortUrl {
 
     res.status(201).json(urlResponse)
   }
-
-  get (_: Request, res: Response): void {
-    res.json({ message: 'Aqui se redirigira a la ruta horiginal' })
-  }
 }
 
 export default new ShortUrl()

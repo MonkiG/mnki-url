@@ -1,5 +1,5 @@
 import UserLinksController from './controller'
-import BaseRouter from './../../core/lib/BaseRouter'
+import BaseRouter from '../../core/lib/BaseRouter'
 
 export default class UserLinksRouter extends BaseRouter {
   constructor () {
