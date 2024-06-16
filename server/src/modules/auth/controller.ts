@@ -1,23 +1,16 @@
 import { type Request, type Response } from 'express'
-import AuthValidators from './validator'
 import ErrorNames from './../../core/enums/ErrorsNames'
 import AuthServices from './services/postgres/AuthServices'
-import type BodyResponse from './../../core/enums/Responses'
-import { HttpResponsesStatuses, ResponseStatuses } from './../../core/enums/Responses'
+import { HttpResponsesStatuses } from './../../core/enums/Responses'
+import { LoginRequest, SignUpRequest } from './models'
 
 class AuthController {
   services = new AuthServices()
-  validator = new AuthValidators()
-  response: BodyResponse = {
-    status: ResponseStatuses.Success,
-    data: {},
-    message: ''
-  }
 
   async login (req: Request, res: Response): Promise<void> {
     const { body } = req
     try {
-      const loginData = this.validator.toLoginDto(body)
+      const loginData = new LoginRequest(body)
       const loginAuth = await this.services.logIn(loginData)
       if (!loginAuth) res.status(HttpResponsesStatuses.NOT_FOUND).json({ message: ' User don\'t found!' })
       else {
@@ -27,11 +20,18 @@ class AuthController {
       const { name } = e
       if (name === ErrorNames.TypeError) {
         res.status(HttpResponsesStatuses.BAD_REQUEST).json({ message: 'Invalid data format' })
+        return
+      }
+      if (name === 'BadRequest') {
+        res.status(HttpResponsesStatuses.BAD_REQUEST).json({ message: 'Bad request, you don\'t provided a required information' })
+        return
+      }
+      if (name === 'PasswordError') {
+        res.status(HttpResponsesStatuses.UNAUTHORIZED).json({ message: 'Incorrect password' })
+        return
       }
 
-      if (name === 'password error') {
-        res.status(401).json({ message: 'Incorrect password' })
-      }
+      res.status(HttpResponsesStatuses.ERROR).json({ message: 'Server error' })
     }
   }
 
@@ -39,7 +39,7 @@ class AuthController {
     const { body } = req
 
     try {
-      const signUpData = this.validator.toSignUpDto(body)
+      const signUpData = new SignUpRequest(body)
 
       const responseDto = await this.services.signUp(signUpData)
 
@@ -51,10 +51,21 @@ class AuthController {
     } catch (e: any) {
       const { name } = e
 
-      console.log(e)
       if (name === ErrorNames.TypeError) {
         res.status(HttpResponsesStatuses.BAD_REQUEST).json({ message: 'Invalid data format' })
+        return
       }
+
+      if (name === 'BadRequest') {
+        res.status(HttpResponsesStatuses.BAD_REQUEST).json({ message: 'Bad request, you don\'t provided a required information' })
+        return
+      }
+      if (name === 'PasswordError') {
+        res.status(HttpResponsesStatuses.UNAUTHORIZED).json({ message: 'Incorrect password' })
+        return
+      }
+
+      res.status(HttpResponsesStatuses.ERROR).json({ message: 'Server error' })
     }
   }
 }

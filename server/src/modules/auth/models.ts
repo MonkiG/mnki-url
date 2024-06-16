@@ -1,40 +1,63 @@
+import PrimitivesValidators from '../../core/lib/PrimitivesValidators'
 import { type UUID } from '../../core/types'
 
-export interface SignUpDbRespose {
+export interface LoginRequestDto {
+  identifier: string
+  password: string
+}
+
+export interface SignUpRequestDto {
+  userName: string
+  email: string
+  password: string
+}
+
+interface AuthResponseDto {
   id: UUID
   userName: string
   email: string
-  password: string
   createdAt: Date
   updatedAt: Date
+  token: string
 }
-export interface LoginDto {
-  identifier: string // Puede ser email o username
+export interface LoginResponseDto extends AuthResponseDto {}
+export interface SignUpResponseDto extends AuthResponseDto {}
+
+export interface DbAuthQuery {
+  id: UUID
+  user_name: string
+  email: string
+  created_at: Date
+  updated_at: Date
   password: string
 }
 
-export interface AuthResponseDto {
-  userName: string
-  email: string
-  token: string
+export class LoginRequest implements LoginRequestDto {
+  identifier: string
+  password: string
+  constructor ({ identifier, password }: any) {
+    if (!identifier || !password) {
+      const badRequestError = new Error('Required data don\'t provided')
+      badRequestError.name = 'BadRequest'
+      throw badRequestError
+    }
+    this.identifier = PrimitivesValidators.isString(identifier)
+    this.password = PrimitivesValidators.isString(password)
+  }
 }
-export interface SignUpDto {
+
+export class SignUpRequest implements SignUpRequestDto {
   userName: string
   email: string
   password: string
-}
-
-export default class AuthResponse implements AuthResponseDto {
-  userName: string
-  email: string
-  token: string
-  constructor ({
-    userName,
-    email,
-    token
-  }: AuthResponseDto) {
-    this.userName = userName
-    this.email = email
-    this.token = token
+  constructor ({ userName, email, password }: any) {
+    if (!userName || !email || !password) {
+      const badRequestError = new Error('Required data don\'t provided')
+      badRequestError.name = 'BadRequest'
+      throw badRequestError
+    }
+    this.userName = PrimitivesValidators.isString(userName)
+    this.email = PrimitivesValidators.isString(email)
+    this.password = PrimitivesValidators.isString(password)
   }
 }
