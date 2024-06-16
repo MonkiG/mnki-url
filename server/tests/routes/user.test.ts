@@ -6,7 +6,6 @@ import Environment from '../../src/core/enums/environments'
 import { HttpResponsesStatuses } from '../../src/core/enums/Responses'
 import { pool } from '../../src/context/context.postgres'
 import { type DbAuthQuery } from '../../src/modules/auth/models'
-import Config from '../../src/core/config'
 
 describe('User routes', () => {
   let app: App
@@ -16,13 +15,13 @@ describe('User routes', () => {
     app = new App({ port: 3004, environment: Environment.LOCAL })
     app.start()
     server = app.getServer()
-    const { rows: [data] } = await pool.query<DbAuthQuery>(`INSERT INTO users(user_name, email, password) VALUES ('MonkiG','${Config.TEST_EMAIL}','password') RETURNING *`)
+    const { rows: [data] } = await pool.query<DbAuthQuery>('INSERT INTO users(user_name, email, password) VALUES (\'MonkiG\',\'some@email.com\',\'password\') RETURNING *')
     user = data
   })
 
   afterAll(async () => {
     server.close()
-    await pool.query(`DELETE FROM users WHERE email='${Config.TEST_EMAIL}'`)
+    await pool.query('DELETE FROM users WHERE id=$1', [user.id])
   })
   describe('/user', () => {
     test('Should return status 200 /', async () => {

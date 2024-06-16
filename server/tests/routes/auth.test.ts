@@ -14,7 +14,6 @@ describe('Auth routes', () => {
       environment: Environment.LOCAL
     })
     app.start()
-    await pool.query(`DELETE FROM users WHERE email='${Config.TEST_EMAIL}'`)
   })
 
   afterAll(async () => {
