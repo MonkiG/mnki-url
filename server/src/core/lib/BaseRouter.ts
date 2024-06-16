@@ -2,7 +2,7 @@ import { Router } from 'express'
 import type BaseResourceController from './BaseResourceController'
 
 export default abstract class BaseRouter {
-  router: Router = Router()
+  router: Router = Router({ mergeParams: true })
 
   protected defaultRoutes (): void {
     this.router.all('*', (_, res) => {
@@ -11,12 +11,13 @@ export default abstract class BaseRouter {
   }
 
   protected resource (
-    controllerClass: BaseResourceController
+    controllerClass: BaseResourceController,
+    paramName?: string
   ): void {
-    this.router.get('/:id', controllerClass.get)
+    this.router.get(`/:${paramName}` ?? '/:id', controllerClass.get)
     this.router.post('/', controllerClass.store)
-    this.router.patch('/:id', controllerClass.edit)
-    this.router.put('/:id', controllerClass.edit)
-    this.router.delete('/:id', controllerClass.delete)
+    this.router.patch(`/:${paramName}` ?? '/:id', controllerClass.edit)
+    this.router.put(`/:${paramName}` ?? '/:id', controllerClass.edit)
+    this.router.delete(`/:${paramName}` ?? '/:id', controllerClass.delete)
   }
 }
