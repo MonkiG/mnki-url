@@ -40,7 +40,6 @@ export default class App {
     this.expressApp.use('/auth', new AuthRouter().router)
     this.expressApp.use('/user/:id/urls', new UserLinksRouter().router)
     this.expressApp.use('/user', new UserRouter().router)
-    this.expressApp.use('/users', new UsersRouter().router)
     this.expressApp.use('/short', new UrlRouter().router)
     this.expressApp.use(new MainRouter().router)
   }
