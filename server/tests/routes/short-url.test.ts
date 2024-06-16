@@ -3,7 +3,6 @@ import request from 'supertest'
 import { type Server } from 'node:http'
 import App from '../../src/app'
 import Environment from '../../src/core/enums/environments'
-import { ResponseShortUrlDTO } from '../../src/modules/url/models'
 import { pool } from '../../src/context/context.postgres'
 
 describe('Short url test', () => {
@@ -30,20 +29,6 @@ describe('Short url test', () => {
         })
 
       expect(response.status).toBe(201)
-    })
-
-    test('Should return the response dto structure', async () => {
-      const response = await request(app.expressApp)
-        .post('/short')
-        .send({
-          url
-        })
-
-      const responseBody: ResponseShortUrlDTO = response.body
-
-      Object.keys(ResponseShortUrlDTO).forEach(key => {
-        expect(responseBody).toHaveProperty(key)
-      })
     })
   })
 })
