@@ -1,69 +1,40 @@
-import Config from '../../core/config'
-import { type UUID } from './../../core/types'
+import PrimitivesValidators from '../../core/lib/PrimitivesValidators'
+import { type UUID } from '../../core/types'
+import isValidUrl from '../../core/utils/valid-url'
 
-export interface RequestShorURLConstructor {
-  url: string
+export interface ShortUrlRequestDto {
+  url: URL
   alias?: string
-
+}
+export interface ShortUrlResponseDto {
+  id: UUID
+  original: string
+  hash: string
+  alias?: string
+  createdAt: Date
+  updatedAt: Date
 }
 
-export class RequestShorURL {
-  url: string
+export interface DbUrlQuery {
+  id: UUID
+  original: string
   alias?: string
+  hash: string
+  created_at: Date
+  updated_at: Date
+}
+
+export class ShortUrlRequest implements ShortUrlRequestDto {
+  url: URL
+  alias?: string | undefined
   constructor ({ url, alias }: any) {
-    this.url = url
-    this.alias = alias
+    const { data } = isValidUrl(PrimitivesValidators.isString(url))
+    if (!data) {
+      const urlError = new Error('Invalid url')
+      urlError.name = 'InvalidUrl'
+      throw urlError
+    }
+    this.url = data
+    this.alias = alias && PrimitivesValidators.isString(alias)
   }
-}
-export class ShortURL {
-  id: UUID
-  original: string
-  hash: string
-  alias?: string
-
-  constructor ({
-    id, original, hash, alias
-  }: ShortURLConstructor) {
-    this.id = id
-    this.original = original
-    this.hash = hash
-    this.alias = alias
-  }
-}
-
-export class ResponseShortUrlDTO {
-  id: UUID
-  original: string
-  hash: string
-  alias?: string
-  createdAt: Date
-  updatedAt: Date
-  shorted: string[]
-  constructor ({
-    id,
-    original,
-    hash,
-    alias,
-    createdAt,
-    updatedAt
-  }: ResponseShortUrlConstructor) {
-    this.id = id
-    this.original = original
-    this.hash = hash
-    this.alias = alias
-    this.createdAt = new Date(createdAt)
-    this.updatedAt = new Date(updatedAt)
-    this.shorted = this.alias ? [`${Config.DOMAIN}/${this.hash}`, `${Config.DOMAIN}/${this.alias}}`] : [`${Config.DOMAIN}/${this.hash}`]
-  }
-}
-
-export interface ResponseShortUrlConstructor extends ShortURLConstructor {
-  createdAt: Date
-  updatedAt: Date
-}
-export interface ShortURLConstructor {
-  id: UUID
-  original: string
-  hash: string
-  alias?: string
 }

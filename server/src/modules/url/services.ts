@@ -1,32 +1,22 @@
 import { pool } from '../../context/context.postgres'
-import isValidUrl from '../../core/utils/valid-url'
-import { ShortURL, ResponseShortUrlDTO, type ShortURLConstructor } from './models'
+import { type ShortUrlResponseDto, type ShortUrlRequest, type DbUrlQuery } from './models'
 
-export async function createShortUrl (url: string, alias?: string): Promise<ResponseShortUrlDTO> {
-  const { data: parseredUrl, error } = isValidUrl(url)
-  if (error !== null) {
-    throw new Error('The url provided is not a valid url')
-  }
-
+export async function createShortUrl (shortUrlRequest: ShortUrlRequest): Promise<ShortUrlResponseDto> {
   const urlUuid = crypto.randomUUID()
-  const urlHash = urlUuid.split('-').slice(-1)[0].slice(-6)
-  const shortUrl = new ShortURL({
-    id: urlUuid,
-    original: parseredUrl!.href,
-    hash: urlHash,
-    alias
-  })
 
-  const { rows: [shortUrlSaved] } = await pool.query(
-    'INSERT INTO urls(id, original, hash, alias) VALUES($1, $2, $3, $4)  RETURNING *',
-    [shortUrl.id, shortUrl.original, shortUrl.hash, shortUrl.alias !== undefined ? alias : null]
+  const urlHash = urlUuid.split('-').slice(-1)[0].slice(-6)
+
+  const { rows: [shortUrlSaved] } = await pool.query<DbUrlQuery>(
+    'INSERT INTO urls(original, hash, alias) VALUES($1, $2, $3)  RETURNING *',
+    [shortUrlRequest.url.href, urlHash, shortUrlRequest.alias ?? null]
   )
 
-  const responseDto = new ResponseShortUrlDTO({
-    ...shortUrlSaved as ShortURLConstructor,
+  return {
+    id: shortUrlSaved.id,
+    original: shortUrlSaved.original,
+    alias: shortUrlSaved.alias,
+    hash: shortUrlSaved.hash,
     createdAt: shortUrlSaved.created_at,
     updatedAt: shortUrlSaved.updated_at
-  })
-
-  return responseDto
+  }
 }
