@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS urls CASCADE;
-DROP TABLE IF EXISTS user_url CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
 
@@ -10,7 +9,6 @@ CREATE TABLE IF NOT EXISTS users(
     password TEXT NOT NULL, 
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
     updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp
-
 );
 
 CREATE TABLE IF NOT EXISTS urls(
@@ -19,13 +17,7 @@ CREATE TABLE IF NOT EXISTS urls(
     hash TEXT NOT NULL UNIQUE,
     alias TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
-    updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp
+    updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE
 );
-
-CREATE TABLE IF NOT EXISTS user_url(
-    id SERIAL PRIMARY KEY NOT NULL,
-    user_id UUID REFERENCES users(id),
-    url_id UUID REFERENCES links(id)
-);
-
 
