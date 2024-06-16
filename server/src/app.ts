@@ -7,7 +7,6 @@ import AuthRouter from './modules/auth/routes'
 import UserRouter from './modules/user/routes'
 import UrlRouter from './modules/url/routes'
 import UserLinksRouter from './modules/user-urls/routes'
-import UsersRouter from './modules/users/routes'
 import MainRouter from './modules/index/route'
 
 export default class App {
@@ -45,11 +44,10 @@ export default class App {
   }
 
   getServer (): Server {
-    if (this.#server !== undefined && this.#server !== null) {
-      return this.#server
+    if (!this.#server) {
+      throw new Error('Server not setted, you should start the application first.')
     }
-
-    throw new Error('Server not setted, you should start the application first.')
+    return this.#server
   }
 
   start (): void {
