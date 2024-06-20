@@ -1,42 +1,19 @@
-/* eslint-disable @typescript-eslint/promise-function-async */
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './../public/vite.svg'
-import './App.css'
+import Footer from './components/ui/Footer.jsx'
+import Header from './components/ui/Header.js'
+import Hero from './components/ui/hero/Hero.js'
 
-function App (): JSX.Element {
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    fetch('http://localhost:3000/')
-      .then(res => res.json())
-      .then(data => { console.log(data) })
-      .catch(e => { console.log(e) })
-  }, [])
+export default function App (): JSX.Element {
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => { setCount((count) => count + 1) }}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Header/>
+      <main className="min-h-full grow">
+        <h2 className='text-center font-montserrat-alt text-3xl mt-5 mb-16'>
+          Share your content in a <span className='text-main'>easier</span> <br />
+          way.
+        </h2>
+        <Hero />
+      </main>
+     <Footer />
     </>
   )
 }
-
-export default App
