@@ -1,6 +1,6 @@
 import { type ChangeEvent, type FormEvent, type HTMLAttributes } from 'react'
-import MainButton from '../MainButton'
-import { type InputData } from './Hero'
+import MainButton from './MainButton'
+import { type InputData } from './../../types'
 
 interface FromProps extends HTMLAttributes<HTMLFormElement> {
   onSubmit?: (e: FormEvent<HTMLFormElement>) => void

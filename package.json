@@ -18,7 +18,7 @@
     "lint:front": "cd ./front && npm run lint",
     "build:front": "cd ./front && npm run build",
     "preview:front": "cd ./front && npm run preview",
-    "dev": "concurrently --kill-others \"npm run back:dev\" \"npm run front:dev\""
+    "dev": "concurrently --kill-others \"npm run dev:back\" \"npm run dev:front\""
   },
   "dependencies": {
     "concurrently": "^8.2.2",

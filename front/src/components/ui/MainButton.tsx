@@ -9,7 +9,7 @@ export default function MainButton ({ text, className, onClick, type }: ButtonPr
   return (
     <button
       type={type}
-      className={`bg-main text-white font-arsenal font-bold py-2 rounded-lg hover:bg-main/90 ${className}`}
+      className={`bg-main text-white font-arsenal font-bold py-2 px-2 rounded-lg hover:bg-main/90 ${className}`}
       onClick={type !== 'submit' ? onClick : undefined }>
         {text}
     </button>
