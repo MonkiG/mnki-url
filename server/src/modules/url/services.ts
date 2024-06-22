@@ -14,6 +14,7 @@ export async function createShortUrl (shortUrlRequest: ShortUrlRequest, userId?:
   return {
     id: shortUrlSaved.id,
     original: shortUrlSaved.original,
+    serverUrl: shortUrlRequest.serverUrl!,
     alias: shortUrlSaved.alias,
     hash: shortUrlSaved.hash,
     createdAt: shortUrlSaved.created_at,

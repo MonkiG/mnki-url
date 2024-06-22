@@ -1,4 +1,5 @@
 ## To do:
+- Handle url's with the same alias
 - Handle user-url module errors
 - Add Database ORM for a better queries handling
 - Refactor code (implement design patterns)

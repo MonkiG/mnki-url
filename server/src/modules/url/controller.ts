@@ -7,8 +7,11 @@ class ShortUrl {
   services = ShorUrlServices
   async create (req: Request, res: Response): Promise<void> {
     const { body } = req
+    const serverUrl = `${req.protocol}://${req.get('host')}/`
+
     try {
       const requestShortURl = new ShortUrlRequest(body)
+      requestShortURl.serverUrl = serverUrl
       const urlResponse = await this.services.createShortUrl(requestShortURl)
       res.status(201).json(urlResponse)
     } catch (e: any) {

@@ -10,6 +10,7 @@ export interface ShortUrlResponseDto {
   id: UUID
   original: string
   hash: string
+  serverUrl: string
   alias?: string
   createdAt: Date
   updatedAt: Date
@@ -27,6 +28,7 @@ export interface DbUrlQuery {
 export class ShortUrlRequest implements ShortUrlRequestDto {
   url: URL
   alias?: string | undefined
+  serverUrl?: string
   constructor ({ url, alias }: any) {
     const { data } = isValidUrl(PrimitivesValidators.isString(url))
     if (!data) {
