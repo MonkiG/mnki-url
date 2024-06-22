@@ -2,6 +2,7 @@ import { type LoginResponseDto, type LoginRequestDto, type DbAuthQuery, type Sig
 import { pool } from './../../../../context/context.postgres'
 import { signToken } from '../../../../core/Jwt'
 import bcrypt from 'bcrypt'
+import PasswordError from '../../../../core/errors/PasswordError'
 
 export default class AuthServices {
   async logIn (data: LoginRequestDto): Promise<LoginResponseDto | null> {
@@ -13,9 +14,7 @@ export default class AuthServices {
     const isSamePassword = await bcrypt.compare(data.password, loginData.password)
 
     if (!isSamePassword) {
-      const passwordError = new Error('Incorrect password')
-      passwordError.name = 'PasswordError'
-      throw passwordError
+      throw new PasswordError()
     }
 
     const token = signToken(loginData.id, loginData.email, loginData.user_name)

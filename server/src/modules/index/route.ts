@@ -1,3 +1,4 @@
+import ErrorNames from '../../core/enums/ErrorsNames'
 import BaseRouter from './../../core/lib/BaseRouter'
 import { getOriginalUrl } from './services'
 
@@ -15,7 +16,7 @@ export default class MainRouter extends BaseRouter {
         const originalUrl = await getOriginalUrl(identifier)
         res.redirect(originalUrl.href)
       } catch (e: any) {
-        if (e.name === 'urlError') {
+        if (e.name === ErrorNames.URLError) {
           res.status(204).json({ message: 'Url don\'t found' })
         }
       }

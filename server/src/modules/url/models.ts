@@ -1,3 +1,4 @@
+import InvalidURLError from '../../core/errors/InvalidURLError'
 import PrimitivesValidators from '../../core/lib/PrimitivesValidators'
 import { type UUID } from '../../core/types'
 import isValidUrl from '../../core/utils/valid-url'
@@ -28,14 +29,13 @@ export interface DbUrlQuery {
 export class ShortUrlRequest implements ShortUrlRequestDto {
   url: URL
   alias?: string | undefined
-  serverUrl?: string
-  constructor ({ url, alias }: any) {
+  serverUrl: string
+  constructor ({ url, alias, serverUrl }: any) {
     const { data } = isValidUrl(PrimitivesValidators.isString(url))
     if (!data) {
-      const urlError = new Error('Invalid url')
-      urlError.name = 'InvalidUrl'
-      throw urlError
+      throw new InvalidURLError()
     }
+    this.serverUrl = serverUrl
     this.url = data
     this.alias = alias && PrimitivesValidators.isString(alias)
   }

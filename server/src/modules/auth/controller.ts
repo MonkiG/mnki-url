@@ -22,11 +22,11 @@ class AuthController {
         res.status(HttpResponsesStatuses.BAD_REQUEST).json({ message: 'Invalid data format' })
         return
       }
-      if (name === 'BadRequest') {
+      if (name === ErrorNames.BadRequestError) {
         res.status(HttpResponsesStatuses.BAD_REQUEST).json({ message: 'Bad request, you don\'t provided a required information' })
         return
       }
-      if (name === 'PasswordError') {
+      if (name === ErrorNames.PasswordError) {
         res.status(HttpResponsesStatuses.UNAUTHORIZED).json({ message: 'Incorrect password' })
         return
       }
@@ -56,11 +56,11 @@ class AuthController {
         return
       }
 
-      if (name === 'BadRequest') {
+      if (name === ErrorNames.BadRequestError) {
         res.status(HttpResponsesStatuses.BAD_REQUEST).json({ message: 'Bad request, you don\'t provided a required information' })
         return
       }
-      if (name === 'PasswordError') {
+      if (name === ErrorNames.PasswordError) {
         res.status(HttpResponsesStatuses.UNAUTHORIZED).json({ message: 'Incorrect password' })
         return
       }

@@ -5,6 +5,11 @@ import { createShortUrl } from '../url/services'
 import { ShortUrlRequest } from '../url/models'
 import { type UUID } from '../../core/types'
 
+/**
+ * TODO:
+ * - Pass all the login into a service / Repository
+ *
+ */
 class UserLinksController implements BaseResourceController {
   async getAll (req: Request, res: Response): Promise<void> {
     const { id } = req.params

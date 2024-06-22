@@ -1,3 +1,4 @@
+import BadRequestError from '../../core/errors/BadRequestError'
 import PrimitivesValidators from '../../core/lib/PrimitivesValidators'
 import { type UUID } from '../../core/types'
 
@@ -37,9 +38,7 @@ export class LoginRequest implements LoginRequestDto {
   password: string
   constructor ({ identifier, password }: any) {
     if (!identifier || !password) {
-      const badRequestError = new Error('Required data don\'t provided')
-      badRequestError.name = 'BadRequest'
-      throw badRequestError
+      throw new BadRequestError()
     }
     this.identifier = PrimitivesValidators.isString(identifier)
     this.password = PrimitivesValidators.isString(password)
@@ -52,9 +51,7 @@ export class SignUpRequest implements SignUpRequestDto {
   password: string
   constructor ({ userName, email, password }: any) {
     if (!userName || !email || !password) {
-      const badRequestError = new Error('Required data don\'t provided')
-      badRequestError.name = 'BadRequest'
-      throw badRequestError
+      throw new BadRequestError()
     }
     this.userName = PrimitivesValidators.isString(userName)
     this.email = PrimitivesValidators.isString(email)
