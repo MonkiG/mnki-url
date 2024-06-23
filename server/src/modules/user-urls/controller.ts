@@ -1,9 +1,10 @@
 import { type Response, type Request } from 'express'
 import type BaseResourceController from '../../core/lib/BaseResourceController'
 import { pool } from '../../context/context.postgres'
-import { createShortUrl } from '../url/services'
+import { createShortUrl, userShortUrlExists } from '../url/services'
 import { ShortUrlRequest } from '../url/models'
 import { type UUID } from '../../core/types'
+import { HttpResponsesStatuses } from '../../core/enums/Responses'
 
 /**
  * TODO:
@@ -29,7 +30,7 @@ class UserLinksController implements BaseResourceController {
       }
     })
 
-    res.status(200).json(urlsParsed)
+    res.status(HttpResponsesStatuses.OK).json(urlsParsed)
   }
 
   async get (req: Request, res: Response): Promise<void> {
@@ -41,7 +42,7 @@ class UserLinksController implements BaseResourceController {
       `, [id, urlId])
 
     if (!data) {
-      res.status(404).json({ message: 'Url don\'t found' })
+      res.status(HttpResponsesStatuses.NOT_FOUND).json({ message: 'Url don\'t found' })
       return
     }
     /* eslint-disable-next-line */
@@ -52,7 +53,7 @@ class UserLinksController implements BaseResourceController {
       updatedAt: data.updated_at
     }
 
-    res.status(200).json(urlParsed)
+    res.status(HttpResponsesStatuses.OK).json(urlParsed)
   }
 
   async store (req: Request, res: Response): Promise<void> {
@@ -60,8 +61,15 @@ class UserLinksController implements BaseResourceController {
     const { body } = req
     const requestShortURl = new ShortUrlRequest(body)
     if (!id) return
+
+    const urlAliasExists = requestShortURl.alias && await userShortUrlExists(requestShortURl.alias, id as UUID)
+    if (urlAliasExists) {
+      res.status(HttpResponsesStatuses.CONFLICT).json({ message: 'URL Alias already exists' })
+      return
+    }
+
     const shortUrl = await createShortUrl(requestShortURl, id as UUID)
-    res.status(201).json(shortUrl)
+    res.status(HttpResponsesStatuses.CREATED).json(shortUrl)
   }
 
   async edit (req: Request, res: Response): Promise<void> {
@@ -86,7 +94,7 @@ class UserLinksController implements BaseResourceController {
 
     const { rows: [data] } = await pool.query(query, values)
     if (!data) {
-      res.status(404).json({ message: 'URL not found' })
+      res.status(HttpResponsesStatuses.NOT_FOUND).json({ message: 'URL not found' })
       return
     }
 
@@ -97,7 +105,7 @@ class UserLinksController implements BaseResourceController {
       createdAt: data.created_at,
       updatedAt: data.updated_at
     }
-    res.status(200).json(urlParsed)
+    res.status(HttpResponsesStatuses.OK).json(urlParsed)
   }
 
   async delete (req: Request, res: Response): Promise<void> {
@@ -108,7 +116,7 @@ class UserLinksController implements BaseResourceController {
       WHERE user_id  = $1 AND id = $2
 
     `, [id, urlId])
-    res.status(204).send()
+    res.status(HttpResponsesStatuses.NO_CONTENT).send()
   }
 }
 

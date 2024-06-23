@@ -9,6 +9,8 @@ describe('Short url test', () => {
   let app: App
   let server: Server
   const url = 'https://monki-portfolio.vercel.app/'
+  const urlAlias = 'rare-alias'
+
   beforeAll(async () => {
     app = new App({ port: 3002, environment: Environment.DEVELOPMENT })
     app.start()
@@ -30,5 +32,27 @@ describe('Short url test', () => {
 
       expect(response.status).toBe(201)
     })
+  })
+
+  test('Should return status 201', async () => {
+    const response = await request(app.expressApp)
+      .post('/short')
+      .send({
+        url,
+        alias: urlAlias
+      })
+
+    expect(response.status).toBe(201)
+  })
+
+  test('Should return status 409', async () => {
+    const response = await request(app.expressApp)
+      .post('/short')
+      .send({
+        url,
+        alias: urlAlias
+      })
+
+    expect(response.status).toBe(409)
   })
 })

@@ -12,7 +12,14 @@ class ShortUrl {
     body.serverUrl = serverUrl
     try {
       const requestShortURl = new ShortUrlRequest(body)
+      const urlAliasExists = requestShortURl.alias && await ShorUrlServices.shortUrlExists(requestShortURl.alias)
+
+      if (urlAliasExists) {
+        res.status(HttpResponsesStatuses.CONFLICT).json({ message: 'URL Alias already exists' })
+        return
+      }
       const urlResponse = await this.services.createShortUrl(requestShortURl)
+
       res.status(201).json(urlResponse)
     } catch (e: any) {
       if (e.name === ErrorNames.InvalidURLError) {

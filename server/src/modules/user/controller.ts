@@ -10,7 +10,7 @@ class UserController {
 
     const { rows: [user] } = await pool.query<BdUserQuery>('Select id, user_name, email, created_at, updated_at FROM users WHERE id=$1', [id])
 
-    res.status(200).json({
+    res.status(HttpResponsesStatuses.OK).json({
       id: user.id,
       userName: user.user_name,
       email: user.email,
@@ -59,7 +59,7 @@ class UserController {
       await pool.query(query, values)
       res.status(HttpResponsesStatuses.NO_CONTENT).send()
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' })
+      res.status(HttpResponsesStatuses.ERROR).json({ message: 'Internal server error' })
     }
   }
 
@@ -67,7 +67,7 @@ class UserController {
     const { id } = req.params
 
     await pool.query('DELETE FROM users WHERE id=$1', [id])
-    res.status(204).send()
+    res.status(HttpResponsesStatuses.NO_CONTENT).send()
   }
 }
 
